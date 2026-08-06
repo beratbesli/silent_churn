@@ -25,7 +25,7 @@ Silent Churn monitors customer sentiment across **three data channels** (emails,
 ### One-Click Startup (Recommended)
 You can start both backend and frontend servers simultaneously using the provided starter scripts:
 
-- **Windows:** Double-click [run_windows.bat](file:///C:/Users/berat/Desktop/hackathon/run_windows.bat)
+- **Windows:** Double-click [run_windows.bat](run_windows.bat)
 - **macOS / Linux:** Run the following commands in your terminal:
   ```bash
   chmod +x run_mac_linux.sh
@@ -41,7 +41,7 @@ You can start both backend and frontend servers simultaneously using the provide
 ### 1. Clone & Setup Backend
 
 ```bash
-cd hackathon/backend
+cd backend
 
 # Create virtual environment
 python -m venv venv
@@ -62,7 +62,7 @@ uvicorn app.main:app --reload --port 8000
 ### 2. Setup Frontend
 
 ```bash
-cd hackathon/frontend
+cd frontend
 
 # Install dependencies
 npm install
