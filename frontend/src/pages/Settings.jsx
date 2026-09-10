@@ -1,16 +1,21 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, Server, Cloud, PowerOff, Ghost, Info } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import { useProvider } from '../context/ProviderContext';
+import { useToast } from '../context/ToastContext';
 
 export default function Settings() {
  const navigate = useNavigate();
  const { providerType, providerService, modelId, disconnect } = useProvider();
+ const { addToast } = useToast();
 
  const handleDisconnect = async () => {
- await disconnect();
- navigate('/');
+ try {
+   await disconnect();
+   navigate('/');
+ } catch {
+   addToast('Failed to disconnect provider.', 'error');
+ }
  };
 
  return (
@@ -126,4 +131,3 @@ export default function Settings() {
  </div>
  );
 }
-

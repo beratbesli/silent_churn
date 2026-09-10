@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import { AlertTriangle } from 'lucide-react';
+import PropTypes from 'prop-types';
 
 export default class ErrorBoundary extends Component {
  constructor(props) {
@@ -11,7 +12,7 @@ export default class ErrorBoundary extends Component {
  return { hasError: true, error };
  }
 
- componentDidCatch(error, info) {
+ componentDidCatch(_error, _info) {
  }
 
  render() {
@@ -45,3 +46,7 @@ export default class ErrorBoundary extends Component {
  return this.props.children;
  }
 }
+
+ErrorBoundary.propTypes = {
+ children: PropTypes.node.isRequired,
+};

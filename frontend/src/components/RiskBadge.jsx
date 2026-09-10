@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 
 export default function RiskBadge({ status }) {
   const getStyles = () => {
@@ -24,3 +24,7 @@ export default function RiskBadge({ status }) {
     </span>
   );
 }
+
+RiskBadge.propTypes = {
+  status: PropTypes.string,
+};

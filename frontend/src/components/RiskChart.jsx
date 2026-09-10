@@ -1,16 +1,7 @@
-import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import PropTypes from 'prop-types';
 
-export default function RiskChart({ data }) {
- if (!data || data.length === 0) {
- return (
- <div className="h-56 flex items-center justify-center text-slate-600 text-sm">
- No chart data available
- </div>
- );
- }
-
- const CustomTooltip = ({ active, payload, label }) => {
+function CustomTooltip({ active, payload, label }) {
  if (active && payload && payload.length) {
  return (
  <div className="bg-[#0f172a]/95 backdrop-blur-md p-3 rounded-2xl border-white/[0.06]">
@@ -26,7 +17,26 @@ export default function RiskChart({ data }) {
  );
  }
  return null;
- };
+}
+
+CustomTooltip.propTypes = {
+ active: PropTypes.bool,
+ payload: PropTypes.arrayOf(PropTypes.shape({
+   color: PropTypes.string,
+   name: PropTypes.string,
+   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+ })),
+ label: PropTypes.string,
+};
+
+export default function RiskChart({ data }) {
+ if (!data || data.length === 0) {
+ return (
+ <div className="h-56 flex items-center justify-center text-slate-600 text-sm">
+ No chart data available
+ </div>
+ );
+ }
 
  return (
  <div className="h-60 w-full">
@@ -96,3 +106,7 @@ export default function RiskChart({ data }) {
  </div>
  );
 }
+
+RiskChart.propTypes = {
+ data: PropTypes.arrayOf(PropTypes.object),
+};

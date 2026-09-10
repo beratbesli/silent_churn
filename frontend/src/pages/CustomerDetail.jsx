@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Mail, MapPin, Utensils, TrendingDown, TrendingUp, ChevronLeft } from 'lucide-react';
+import { Mail, MapPin, Utensils, TrendingDown, TrendingUp, ChevronLeft } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import RiskBadge from '../components/RiskBadge';
 import RiskChart from '../components/RiskChart';
@@ -78,14 +78,15 @@ export default function CustomerDetail() {
  
  setTimeline(combinedTimeline);
 
- } catch (error) {
+ } catch {
+ addToast('Failed to load customer details.', 'error');
  } finally {
  setIsLoading(false);
  }
  };
 
  fetchData();
- }, [id]);
+ }, [id, addToast]);
 
  if (isLoading) {
  return (
@@ -115,24 +116,12 @@ export default function CustomerDetail() {
  if (!customer) return null;
 
  const riskScoreDisplay = Math.round((customer.current_risk_score || 0) * 100);
- const statusColors = {
- 'healthy': 'from-emerald-500/20 to-emerald-500/5',
- 'warning': 'from-amber-500/20 to-amber-500/5',
- 'at_risk': 'from-rose-500/20 to-rose-500/5'
- };
  const textColors = {
  'healthy': 'text-emerald-400',
  'warning': 'text-amber-400',
  'at_risk': 'text-rose-400'
  };
- const borderColors = {
- 'healthy': 'border-emerald-500/30',
- 'warning': 'border-amber-500/30',
- 'at_risk': 'border-rose-500/30'
- };
- const statusGradient = statusColors[customer.risk_status?.toLowerCase()] || 'from-slate-500/20 to-slate-500/5';
  const textColor = textColors[customer.risk_status?.toLowerCase()] || 'text-slate-400';
- const borderColor = borderColors[customer.risk_status?.toLowerCase()] || 'border-slate-500/30';
  const riskHistory = Array.isArray(customer.risk_history) ? customer.risk_history : [];
  const lastRiskEntry = riskHistory.length > 0 ? riskHistory[riskHistory.length - 1] : {};
  let trendDisplay = null;

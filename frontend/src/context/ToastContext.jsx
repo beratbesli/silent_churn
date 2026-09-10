@@ -1,10 +1,15 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import { createContext, useContext, useState, useCallback } from 'react';
 import { CheckCircle2, AlertCircle, Info, X } from 'lucide-react';
+import PropTypes from 'prop-types';
 
 const ToastContext = createContext();
 
 export function ToastProvider({ children }) {
   const [toasts, setToasts] = useState([]);
+
+  const removeToast = useCallback((id) => {
+    setToasts((prev) => prev.filter((toast) => toast.id !== id));
+  }, []);
 
   const addToast = useCallback((message, type = 'info') => {
     const id = Math.random().toString(36).substring(2, 9);
@@ -13,11 +18,7 @@ export function ToastProvider({ children }) {
     setTimeout(() => {
       removeToast(id);
     }, 3000);
-  }, []);
-
-  const removeToast = useCallback((id) => {
-    setToasts((prev) => prev.filter((toast) => toast.id !== id));
-  }, []);
+  }, [removeToast]);
 
   return (
     <ToastContext.Provider value={{ addToast }}>
@@ -45,6 +46,10 @@ export function ToastProvider({ children }) {
   );
 }
 
+ToastProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+};
+
 export function useToast() {
   const context = useContext(ToastContext);
   if (context === undefined) {
@@ -52,4 +57,3 @@ export function useToast() {
   }
   return context;
 }
-

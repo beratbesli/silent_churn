@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Server, Cloud, Eye, EyeOff, Loader2, Ghost } from 'lucide-react';
 import { useProvider } from '../context/ProviderContext';
@@ -22,11 +22,7 @@ export default function ModelSelection() {
   const [isLoadingCloud, setIsLoadingCloud] = useState(false);
   const [cloudError, setCloudError] = useState('');
 
-  useEffect(() => {
-    if (activeCard === 'local') fetchLocalModels();
-  }, [activeCard]);
-
-  const fetchLocalModels = async () => {
+  const fetchLocalModels = useCallback(async () => {
     setIsLoadingLocal(true);
     setLocalError('');
     try {
@@ -38,7 +34,11 @@ export default function ModelSelection() {
     } finally {
       setIsLoadingLocal(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    if (activeCard === 'local') fetchLocalModels();
+  }, [activeCard, fetchLocalModels]);
 
   const handleConnectLocal = async () => {
     if (!selectedLocalModel) return;

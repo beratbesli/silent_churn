@@ -1,5 +1,42 @@
-import React from 'react';
 import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, ReferenceLine } from 'recharts';
+import PropTypes from 'prop-types';
+
+function CustomTooltip({ active, payload }) {
+ if (active && payload && payload.length) {
+   const data = payload[0].payload;
+   return (
+     <div className="bg-zinc-900 text-zinc-100 p-3 rounded-2xl shadow-xl text-sm border border-white/10">
+       <p className="font-semibold mb-1">{data.name}</p>
+       <div className="flex justify-between gap-4 text-xs text-zinc-400">
+         <span>Risk Level:</span>
+         <span className="font-medium text-white">{data.risk}%</span>
+       </div>
+       <div className="flex justify-between gap-4 text-xs text-zinc-400 mt-1">
+         <span>Customer Value:</span>
+         <span className="font-medium text-white">${data.clv.toLocaleString()}</span>
+       </div>
+     </div>
+   );
+ }
+ return null;
+}
+
+CustomTooltip.propTypes = {
+ active: PropTypes.bool,
+ payload: PropTypes.arrayOf(PropTypes.shape({
+   payload: PropTypes.shape({
+     name: PropTypes.string,
+     risk: PropTypes.number,
+     clv: PropTypes.number,
+   }),
+ })),
+};
+
+const getColor = (status) => {
+ if (status === 'healthy') return '#10b981';
+ if (status === 'warning') return '#f59e0b';
+ return '#f43f5e';
+};
 
 export default function RiskDistributionChart({ customers }) {
   if (!customers || customers.length === 0) return null;
@@ -16,32 +53,6 @@ export default function RiskDistributionChart({ customers }) {
       clv: mockCLV,
     };
   });
-
-  const CustomTooltip = ({ active, payload }) => {
-    if (active && payload && payload.length) {
-      const data = payload[0].payload;
-      return (
-        <div className="bg-zinc-900 text-zinc-100 p-3 rounded-2xl shadow-xl text-sm border border-white/10">
-          <p className="font-semibold mb-1">{data.name}</p>
-          <div className="flex justify-between gap-4 text-xs text-zinc-400">
-            <span>Risk Level:</span>
-            <span className="font-medium text-white">{data.risk}%</span>
-          </div>
-          <div className="flex justify-between gap-4 text-xs text-zinc-400 mt-1">
-            <span>Customer Value:</span>
-            <span className="font-medium text-white">${data.clv.toLocaleString()}</span>
-          </div>
-        </div>
-      );
-    }
-    return null;
-  };
-
-  const getColor = (status) => {
-    if (status === 'healthy') return '#10b981';
-    if (status === 'warning') return '#f59e0b';
-    return '#f43f5e';
-  };
 
   return (
     <div className="bg-zinc-50 dark:bg-[#141414] rounded-2xl p-6 w-full h-[350px]">
@@ -88,3 +99,12 @@ export default function RiskDistributionChart({ customers }) {
     </div>
   );
 }
+
+RiskDistributionChart.propTypes = {
+ customers: PropTypes.arrayOf(PropTypes.shape({
+   id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+   name: PropTypes.string,
+   risk_status: PropTypes.string,
+   current_risk_score: PropTypes.number,
+ })),
+};
