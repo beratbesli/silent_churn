@@ -59,6 +59,9 @@ export default function ModelSelection() {
     setCloudError('');
     try {
       await connectCloud(cloudService, apiKey, cloudModelId);
+      // The key is intentionally ephemeral: do not retain it after the
+      // backend has verified the connection or write it to browser storage.
+      setApiKey('');
       navigate('/dashboard');
     } catch {
       setCloudError('Failed to verify API key. Please check and try again.');
@@ -192,6 +195,8 @@ export default function ModelSelection() {
                     className="w-full bg-zinc-100 dark:bg-zinc-800 rounded-xl pl-3 pr-10 py-2 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none font-mono"
                     placeholder="sk-..."
                     value={apiKey}
+                    autoComplete="off"
+                    spellCheck="false"
                     onChange={e => setApiKey(e.target.value)}
                     onClick={e => e.stopPropagation()}
                   />
