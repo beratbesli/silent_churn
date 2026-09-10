@@ -1,10 +1,20 @@
+import { lazy, Suspense } from 'react'
 import { Routes, Route, Link } from 'react-router-dom'
-import ModelSelection from './pages/ModelSelection'
-import Dashboard from './pages/Dashboard'
-import CustomerDetail from './pages/CustomerDetail'
-import Settings from './pages/Settings'
 import ErrorBoundary from './components/ErrorBoundary'
-import ChatWidget from './components/ChatWidget'
+
+const ModelSelection = lazy(() => import('./pages/ModelSelection'))
+const Dashboard = lazy(() => import('./pages/Dashboard'))
+const CustomerDetail = lazy(() => import('./pages/CustomerDetail'))
+const Settings = lazy(() => import('./pages/Settings'))
+const ChatWidget = lazy(() => import('./components/ChatWidget'))
+
+function RouteFallback() {
+ return (
+ <div className="min-h-screen flex items-center justify-center bg-zinc-100 dark:bg-[#09090b] text-zinc-500 dark:text-zinc-400">
+   Loading…
+ </div>
+ )
+}
 
 function NotFound() {
  return (
@@ -24,6 +34,7 @@ function App() {
  return (
  <ErrorBoundary>
  <div className="w-full min-h-screen font-sans relative overflow-x-hidden">
+ <Suspense fallback={<RouteFallback />}>
  <Routes>
  <Route path="/" element={<ModelSelection />} />
  <Route path="/dashboard" element={<Dashboard />} />
@@ -32,6 +43,7 @@ function App() {
  <Route path="*" element={<NotFound />} />
  </Routes>
  <ChatWidget />
+ </Suspense>
  </div>
  </ErrorBoundary>
  )

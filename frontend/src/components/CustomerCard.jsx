@@ -1,9 +1,9 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronRight, Mail } from 'lucide-react';
+import PropTypes from 'prop-types';
 import RiskBadge from './RiskBadge';
 
-export default function CustomerCard({ customer, index = 0 }) {
+export default function CustomerCard({ customer }) {
   const navigate = useNavigate();
 
   const getAccentColor = () => {
@@ -64,3 +64,14 @@ export default function CustomerCard({ customer, index = 0 }) {
     </div>
   );
 }
+
+CustomerCard.propTypes = {
+  customer: PropTypes.shape({
+    id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+    name: PropTypes.string,
+    email: PropTypes.string,
+    risk_status: PropTypes.string,
+    current_risk_score: PropTypes.number,
+    risk_reason: PropTypes.string,
+  }).isRequired,
+};

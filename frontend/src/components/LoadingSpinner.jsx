@@ -1,5 +1,5 @@
-import React from 'react';
 import { Loader2 } from 'lucide-react';
+import PropTypes from 'prop-types';
 
 export default function LoadingSpinner({ size = 'md', className = '' }) {
  const sizeClasses = {
@@ -13,3 +13,8 @@ export default function LoadingSpinner({ size = 'md', className = '' }) {
  <Loader2 className={`animate-spin text-emerald-500 ${sizeClasses[size]} ${className}`} />
  );
 }
+
+LoadingSpinner.propTypes = {
+ size: PropTypes.oneOf(['sm', 'md', 'lg', 'xl']),
+ className: PropTypes.string,
+};

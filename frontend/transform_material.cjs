@@ -46,7 +46,7 @@ function processDirectory(directory) {
       content = content.replace(/\brounded\b/g, 'rounded-xl'); // default rounded to rounded-xl
       
       // Clean up multiple spaces
-      content = content.replace(/ +/g, ' ').replace(/ "\>/g, '">');
+      content = content.replace(/ +/g, ' ').replace(/ ">/g, '">');
 
       fs.writeFileSync(fullPath, content);
       console.log('Processed:', fullPath);

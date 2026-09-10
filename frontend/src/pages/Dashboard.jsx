@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Users, AlertTriangle, AlertCircle, CheckCircle, RefreshCw, Database, Search, Filter, ChevronRight, MoreVertical } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
+import { Users, AlertTriangle, AlertCircle, CheckCircle, RefreshCw, Database, Search } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import StatCard from '../components/StatCard';
 import CustomerCard from '../components/CustomerCard';
@@ -18,11 +18,7 @@ export default function Dashboard() {
  const [sortBy, setSortBy] = useState('risk');
  const { addToast } = useToast();
 
- useEffect(() => {
- fetchCustomers(true);
- }, []);
-
- const fetchCustomers = async (firstLoad = false) => {
+ const fetchCustomers = useCallback(async (firstLoad = false) => {
  if (firstLoad) setIsLoading(true);
  else setIsFetching(true);
  try {
@@ -43,7 +39,11 @@ export default function Dashboard() {
  setIsLoading(false);
  setIsFetching(false);
  }
- };
+ }, [addToast]);
+
+ useEffect(() => {
+ fetchCustomers(true);
+ }, [fetchCustomers]);
 
  const handleGenerateData = async () => {
  setIsGenerating(true);
@@ -274,5 +274,4 @@ export default function Dashboard() {
  </div>
  );
 }
-
 

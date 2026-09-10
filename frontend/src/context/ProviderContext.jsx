@@ -1,4 +1,5 @@
 import { createContext, useState, useContext } from 'react';
+import PropTypes from 'prop-types';
 import api from '../api/client';
 
 const ProviderContext = createContext(null);
@@ -10,39 +11,31 @@ export const ProviderProvider = ({ children }) => {
   const [isConnected, setIsConnected] = useState(false);
 
   const connectLocal = async (selectedModelId) => {
-    try {
-      const response = await api.connectProvider({ provider: 'lmstudio', model_id: selectedModelId });
-      if (response && response.success === false) {
-        throw new Error(response.message || 'Connection failed');
-      }
-      setProviderType('local');
-      setProviderService('lmstudio');
-      setModelId(selectedModelId);
-      setIsConnected(true);
-      return true;
-    } catch (error) {
-      throw error;
+    const response = await api.connectProvider({ provider: 'lmstudio', model_id: selectedModelId });
+    if (response && response.success === false) {
+      throw new Error(response.message || 'Connection failed');
     }
+    setProviderType('local');
+    setProviderService('lmstudio');
+    setModelId(selectedModelId);
+    setIsConnected(true);
+    return true;
   };
 
   const connectCloud = async (service, apiKey, customModelId) => {
-    try {
-      const payload = { provider: service, api_key: apiKey };
-      if (customModelId) {
-        payload.model_id = customModelId;
-      }
-      const response = await api.connectProvider(payload);
-      if (response && response.success === false) {
-        throw new Error(response.message || 'Connection failed');
-      }
-      setProviderType('cloud');
-      setProviderService(service);
-      setModelId(customModelId || 'default');
-      setIsConnected(true);
-      return true;
-    } catch (error) {
-      throw error;
+    const payload = { provider: service, api_key: apiKey };
+    if (customModelId) {
+      payload.model_id = customModelId;
     }
+    const response = await api.connectProvider(payload);
+    if (response && response.success === false) {
+      throw new Error(response.message || 'Connection failed');
+    }
+    setProviderType('cloud');
+    setProviderService(service);
+    setModelId(customModelId || 'default');
+    setIsConnected(true);
+    return true;
   };
 
   const skipConnection = () => {
@@ -53,14 +46,11 @@ export const ProviderProvider = ({ children }) => {
   };
 
   const disconnect = async () => {
-    try {
-      await api.disconnectProvider();
-      setProviderType(null);
-      setProviderService(null);
-      setModelId(null);
-      setIsConnected(false);
-    } catch (error) {
-    }
+    await api.disconnectProvider();
+    setProviderType(null);
+    setProviderService(null);
+    setModelId(null);
+    setIsConnected(false);
   };
 
   const getConfig = () => ({
@@ -85,6 +75,10 @@ export const ProviderProvider = ({ children }) => {
       {children}
     </ProviderContext.Provider>
   );
+};
+
+ProviderProvider.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 export const useProvider = () => useContext(ProviderContext);

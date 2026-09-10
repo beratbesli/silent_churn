@@ -1,5 +1,5 @@
-import React from 'react';
 import { Mail, MapPin, Utensils, ArrowDownLeft, ArrowUpRight } from 'lucide-react';
+import PropTypes from 'prop-types';
 
 export default function TimelineItem({ item }) {
   const getIcon = () => {
@@ -73,3 +73,15 @@ export default function TimelineItem({ item }) {
     </div>
   );
 }
+
+TimelineItem.propTypes = {
+ item: PropTypes.shape({
+   source: PropTypes.string,
+   direction: PropTypes.string,
+   date: PropTypes.string,
+   sentiment: PropTypes.number,
+   subject: PropTypes.string,
+   content: PropTypes.string,
+   analysisReason: PropTypes.string,
+ }).isRequired,
+};
