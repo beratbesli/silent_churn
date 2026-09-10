@@ -7,5 +7,5 @@ python-dotenv>=1,<2
 httpx>=0.27,<1
 openai>=1.35,<2
 anthropic>=0.34,<1
-groq>=0.9,<1
+groq>=1.7.0,<2
 aiosqlite>=0.20,<1
