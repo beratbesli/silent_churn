@@ -1,4 +1,4 @@
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, SecretStr
 from typing import List, Optional
 from datetime import datetime
 
@@ -102,7 +102,10 @@ class ProviderConfig(BaseModel):
 
 class ProviderConnectRequest(BaseModel):
     provider: str
-    api_key: Optional[str] = None
+    # SecretStr prevents accidental credential disclosure in validation errors,
+    # logs, or debug representations. The key is used only for this process
+    # and is never returned in an API response or persisted to disk.
+    api_key: Optional[SecretStr] = None
     model_id: Optional[str] = None
 
 
@@ -127,4 +130,3 @@ class ChatResponse(BaseModel):
 
 class DraftResponse(BaseModel):
     draft: str
-

@@ -33,15 +33,15 @@ async def connect_provider(req: ProviderConnectRequest):
     elif provider_type == "openai":
         if not req.api_key:
             raise HTTPException(status_code=400, detail="API key required for OpenAI")
-        provider = OpenAIProvider(api_key=req.api_key, model_id=req.model_id or "gpt-4o-mini")
+        provider = OpenAIProvider(api_key=req.api_key.get_secret_value(), model_id=req.model_id or "gpt-4o-mini")
     elif provider_type == "anthropic":
         if not req.api_key:
             raise HTTPException(status_code=400, detail="API key required for Anthropic")
-        provider = AnthropicProvider(api_key=req.api_key, model_id=req.model_id or "claude-3-5-sonnet-20240620")
+        provider = AnthropicProvider(api_key=req.api_key.get_secret_value(), model_id=req.model_id or "claude-3-5-sonnet-20240620")
     elif provider_type == "groq":
         if not req.api_key:
             raise HTTPException(status_code=400, detail="API key required for Groq")
-        provider = GroqProvider(api_key=req.api_key, model_id=req.model_id or "llama-3.1-8b-instant")
+        provider = GroqProvider(api_key=req.api_key.get_secret_value(), model_id=req.model_id or "llama-3.1-8b-instant")
     else:
         raise HTTPException(status_code=400, detail=f"Unknown provider type: {provider_type}")
 

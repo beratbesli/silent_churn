@@ -232,7 +232,9 @@ cp .env.example .env
 |----------|----------|-------------|
 | `GOOGLE_PLACES_API_KEY` | No | For fetching real Google Maps reviews |
 
-> **Note:** AI API keys are entered through the UI, not environment variables.
+> **Note:** AI API keys are entered through the UI, held only in process memory
+> for the active session, and cleared from the form after verification. They are
+> never written to `.env`, browser storage, the database, API responses, or logs.
 
 ---
 
