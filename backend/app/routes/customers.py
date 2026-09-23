@@ -10,6 +10,7 @@ from app.schemas import CustomerSummary, CustomerDetail, TimelineEntry, Dashboar
 from app.services.analysis import AnalysisService
 from app.services.synthetic_data import SyntheticDataService
 from app.providers import get_provider_manager
+from app.security import require_admin
 
 router = APIRouter(tags=["customers"])
 
@@ -137,7 +138,7 @@ async def refresh_analysis(mode: str = "demo"):
 
 
 @router.post("/generate-data")
-def generate_data():
+def generate_data(_admin: None = Depends(require_admin)):
     db = SessionLocal()
     try:
         SyntheticDataService.generate_all_data(db)

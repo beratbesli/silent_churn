@@ -53,7 +53,8 @@ pip install -r requirements.txt
 
 # Copy environment file
 cp ../.env.example ../.env
-# Edit .env if you have a Google Places API key
+# Generate two distinct keys with: python -c "import secrets; print(secrets.token_urlsafe(32))"
+# Set SILENT_CHURN_API_TOKEN and SILENT_CHURN_ADMIN_TOKEN in ../.env
 
 # Start backend
 uvicorn app.main:app --reload --port 8000
@@ -73,6 +74,13 @@ npm run dev
 
 ### 3. Open the App
 Navigate to **http://localhost:5173** — you'll see the model selection screen.
+Enter the API access key in the unlock screen. The key stays in browser memory and is
+cleared when the page reloads. Replacing sample data requires the separate admin key;
+the action is unavailable when `SILENT_CHURN_ENV=production`.
+
+For a deployed frontend, set `SILENT_CHURN_ALLOWED_ORIGINS` to its exact HTTPS origin.
+The backend rejects requests without a configured API key and rejects browser mutations
+from other origins.
 
 ---
 
