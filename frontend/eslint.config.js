@@ -1,5 +1,5 @@
 import js from '@eslint/js'
-import react from 'eslint-plugin-react'
+import eslintReact from '@eslint-react/eslint-plugin'
 import reactHooks from 'eslint-plugin-react-hooks'
 import globals from 'globals'
 
@@ -20,17 +20,13 @@ export default [
         ...globals.es2021,
       },
     },
-    settings: {
-      react: { version: 'detect' },
-    },
     plugins: {
-      react,
+      ...eslintReact.configs.jsx.plugins,
       'react-hooks': reactHooks,
     },
     rules: {
       ...js.configs.recommended.rules,
-      ...react.configs.flat.recommended.rules,
-      ...react.configs.flat['jsx-runtime'].rules,
+      ...eslintReact.configs.jsx.rules,
       // Keep the stable runtime invariants enabled. The plugin's current
       // compiler preset also includes experimental data-flow rules that flag
       // valid async loading effects, so it is intentionally not applied.
