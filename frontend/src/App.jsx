@@ -1,6 +1,7 @@
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, useState } from 'react'
 import { Routes, Route, Link } from 'react-router-dom'
 import ErrorBoundary from './components/ErrorBoundary'
+import api from './api/client'
 
 const ModelSelection = lazy(() => import('./pages/ModelSelection'))
 const Dashboard = lazy(() => import('./pages/Dashboard'))
@@ -31,6 +32,38 @@ function NotFound() {
 }
 
 function App() {
+ const [accessKey, setAccessKey] = useState('')
+ const [authorized, setAuthorized] = useState(false)
+ const [authError, setAuthError] = useState('')
+
+ const unlock = async (event) => {
+   event.preventDefault()
+   api.setAccessToken(accessKey)
+   try {
+     await api.getCurrentProvider()
+     setAuthorized(true)
+     setAuthError('')
+     setAccessKey('')
+   } catch {
+     api.setAccessToken('')
+     setAuthError('Invalid access key or unavailable backend.')
+   }
+ }
+
+ if (!authorized) return (
+   <main className="min-h-screen flex items-center justify-center bg-zinc-100 dark:bg-[#0a0a0a] p-6">
+     <form onSubmit={unlock} className="w-full max-w-sm rounded-2xl bg-white dark:bg-[#141414] p-8 space-y-4">
+       <h1 className="text-xl font-semibold dark:text-white">Silent Churn access</h1>
+       <p className="text-sm text-zinc-500">Enter the access key configured on the backend.</p>
+       <input type="password" aria-label="Access key" autoComplete="off" required
+         value={accessKey} onChange={(event) => setAccessKey(event.target.value)}
+         className="w-full rounded-lg border p-2" />
+       {authError && <p role="alert" className="text-sm text-rose-600">{authError}</p>}
+       <button type="submit" className="w-full rounded-lg bg-zinc-900 p-2 text-white">Unlock</button>
+     </form>
+   </main>
+ )
+
  return (
  <ErrorBoundary>
  <div className="w-full min-h-screen font-sans relative overflow-x-hidden">
