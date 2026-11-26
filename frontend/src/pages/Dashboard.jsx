@@ -46,9 +46,11 @@ export default function Dashboard() {
  }, [fetchCustomers]);
 
  const handleGenerateData = async () => {
+ const adminToken = window.prompt('Enter the admin key to replace sample data:');
+ if (!adminToken) return;
  setIsGenerating(true);
  try {
- await api.generateData();
+ await api.generateData(adminToken);
  await fetchCustomers(false);
  addToast('Sample data generated successfully.', 'success');
  } catch (error) {
