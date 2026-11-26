@@ -45,20 +45,4 @@ export default [
       'no-console': 'warn',
     },
   },
-  {
-    files: ['*.cjs'],
-    languageOptions: {
-      ecmaVersion: 'latest',
-      sourceType: 'commonjs',
-      globals: {
-        ...globals.node,
-      },
-    },
-    rules: {
-      ...js.configs.recommended.rules,
-      // These legacy one-off migration scripts intentionally report progress
-      // to the terminal; browser source remains covered by no-console above.
-      'no-console': 'off',
-    },
-  },
 ]

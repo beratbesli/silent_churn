@@ -190,7 +190,7 @@ Customers are flagged based on their composite score:
 ##  Project Structure
 
 ```
-hackathon/
+silent_churn/
 ├── backend/
 │   ├── app/
 │   │   ├── main.py              # FastAPI application
